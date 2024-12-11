@@ -1,6 +1,5 @@
 import dotenv from 'dotenv';
-import {Client, GatewayIntentBits, IntentsBitField} from "discord.js";
-let discord = require('discord.js');
+import {Client} from "discord.js";
 
 dotenv.config();
 
