@@ -26,6 +26,7 @@ client.on('ready', async e => {
     }
     // const guild = await client.guilds.fetch(TEST_GUILD_ID);
     const guild = await e.guilds.fetch(TEST_GUILD_ID);
+    await guild.commands.set(commands);
     // console.log(guild);
     console.log(guild.name);
 });
