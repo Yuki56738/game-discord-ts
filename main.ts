@@ -5,10 +5,9 @@ dotenv.config();
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const TEST_GUILD_ID = process.env.GUILD_ID;
-
 const client = new Client({intents: 7796 });
 
-client.on('ready', async () => {
+client.on('ready', async e => {
     console.log(`Logged in as ${client.user?.tag}!`);
     if (!client.application) {
         console.error("Client application is not available.");
@@ -21,13 +20,14 @@ client.on('ready', async () => {
         .setDescription('Replies with Pong!');
     commands.push(commandPing.toJSON());
 
-    const guild = client.guilds.cache.get(TEST_GUILD_ID!); // 特定のギルドIDを指定
-    if (guild) {
-        await guild.commands.set(commands);
-        console.log("Slash commands have been set.");
-    } else {
-        console.error("Guild not found.");
+    if (!TEST_GUILD_ID) {
+        console.error('TEST_GUILD_ID is not defined.');
+        return;
     }
+    // const guild = await client.guilds.fetch(TEST_GUILD_ID);
+    const guild = await e.guilds.fetch(TEST_GUILD_ID);
+    // console.log(guild);
+    console.log(guild.members);
 });
 
 
