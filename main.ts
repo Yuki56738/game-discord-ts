@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import {Client} from "discord.js";
+import {Client, Collection, SlashCommandBuilder} from "discord.js";
 
 dotenv.config();
 
@@ -10,5 +10,14 @@ const client = new Client({intents: 7796 });
 
 client.on('ready', e => {
     console.log(`Logged in as ${client.user?.tag}!`);
+    let commands = [];
+    const comandPing = new SlashCommandBuilder()
+        .setName('ping')
+        .setDescription('Replies with Pong!');
+    commands.push(comandPing.toJSON());
+    client.application?.commands.set(commands);
 })
+
+
+
 client.login(TOKEN);
