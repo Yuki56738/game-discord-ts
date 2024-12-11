@@ -1,11 +1,11 @@
 import dotenv from 'dotenv';
-import {Client, Collection, Guild, SlashCommandBuilder} from "discord.js";
+import {Client, Collection, Guild, IntentsBitField, SlashCommandBuilder} from "discord.js";
 
 dotenv.config();
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const TEST_GUILD_ID = process.env.GUILD_ID;
-const client = new Client({intents: 7796 });
+const client = new Client({intents: IntentsBitField.Flags.Guilds | IntentsBitField.Flags.GuildMembers | IntentsBitField.Flags.GuildMessages });
 
 client.on('ready', async e => {
     console.log(`Logged in as ${client.user?.tag}!`);
@@ -27,7 +27,7 @@ client.on('ready', async e => {
     // const guild = await client.guilds.fetch(TEST_GUILD_ID);
     const guild = await e.guilds.fetch(TEST_GUILD_ID);
     // console.log(guild);
-    console.log(guild.members);
+    console.log(guild.name);
 });
 
 
