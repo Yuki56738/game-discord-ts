@@ -1,14 +1,13 @@
 import dotenv from 'dotenv';
-import {Client, Collection, Guild, SlashCommandBuilder} from "discord.js";
+import {Client, Collection, Guild, IntentsBitField, SlashCommandBuilder} from "discord.js";
 
 dotenv.config();
 
 const TOKEN = process.env.DISCORD_TOKEN;
 const TEST_GUILD_ID = process.env.GUILD_ID;
+const client = new Client({intents: IntentsBitField.Flags.Guilds | IntentsBitField.Flags.GuildMembers | IntentsBitField.Flags.GuildMessages });
 
-const client = new Client({intents: 7796 });
-
-client.on('ready', async () => {
+client.on('ready', async e => {
     console.log(`Logged in as ${client.user?.tag}!`);
     if (!client.application) {
         console.error("Client application is not available.");
@@ -21,13 +20,15 @@ client.on('ready', async () => {
         .setDescription('Replies with Pong!');
     commands.push(commandPing.toJSON());
 
-    const guild = client.guilds.cache.get(TEST_GUILD_ID!); // 特定のギルドIDを指定
-    if (guild) {
-        await guild.commands.set(commands);
-        console.log("Slash commands have been set.");
-    } else {
-        console.error("Guild not found.");
+    if (!TEST_GUILD_ID) {
+        console.error('TEST_GUILD_ID is not defined.');
+        return;
     }
+    // const guild = await client.guilds.fetch(TEST_GUILD_ID);
+    const guild = await e.guilds.fetch(TEST_GUILD_ID);
+    await guild.commands.set(commands);
+    // console.log(guild);
+    console.log(guild.name);
 });
 
 
