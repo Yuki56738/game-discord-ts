@@ -1,5 +1,5 @@
 import dotenv from 'dotenv';
-import {Client, Collection, SlashCommandBuilder} from "discord.js";
+import {Client, Collection, Guild, SlashCommandBuilder} from "discord.js";
 
 dotenv.config();
 
@@ -8,15 +8,29 @@ const TEST_GUILD_ID = process.env.GUILD_ID;
 
 const client = new Client({intents: 7796 });
 
-client.on('ready', e => {
+client.on('ready', async () => {
     console.log(`Logged in as ${client.user?.tag}!`);
-    let commands = [];
-    const comandPing = new SlashCommandBuilder()
+    if (!client.application) {
+        console.error("Client application is not available.");
+        return;
+    }
+
+    const commands = [];
+    const commandPing = new SlashCommandBuilder()
         .setName('ping')
         .setDescription('Replies with Pong!');
-    commands.push(comandPing.toJSON());
-    client.application?.commands.set(commands);
-})
+    commands.push(commandPing.toJSON());
+
+    const guild = client.guilds.cache.get(TEST_GUILD_ID!); // 特定のギルドIDを指定
+    if (guild) {
+        await guild.commands.set(commands);
+        console.log("Slash commands have been set.");
+    } else {
+        console.error("Guild not found.");
+    }
+});
+
+
 
 
 
